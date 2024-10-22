@@ -2,6 +2,14 @@ uADC_USB/History/*
 uADC_USB/__Previews/*
 *.PrjPcbStructure
 uADC_USB/Project Logs for uADC_USB
-cube_ide
 *.log
 *.raw
+# eclipse specific git ignore
+.metadata/
+RemoteSystemsTempFiles/
+.settings/
+Debug/
+*.launch
+
+# STM32 git ignore
+*.mxproject
