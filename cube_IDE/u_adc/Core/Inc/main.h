@@ -87,6 +87,8 @@ void Error_Handler(void);
 #define LD_4_GPIO_Port GPIOB
 #define LD_5_Pin GPIO_PIN_7
 #define LD_5_GPIO_Port GPIOB
+#define USR_IN_boot_Pin GPIO_PIN_8
+#define USR_IN_boot_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
