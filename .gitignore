@@ -4,6 +4,7 @@ uADC_USB/__Previews/*
 uADC_USB/Project Logs for uADC_USB
 *.log
 *.raw
+Project Outputs for uADC_USB/
 # eclipse specific git ignore
 .metadata/
 RemoteSystemsTempFiles/
