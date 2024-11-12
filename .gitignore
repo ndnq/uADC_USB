@@ -9,6 +9,7 @@ Project Outputs for uADC_USB/
 .metadata/
 RemoteSystemsTempFiles/
 .settings/
+*.fft
 Debug/
 *.launch
 

@@ -1,0 +1,2 @@
+Podpisz SWD
+Zmień rezystory ledów statusowych na idk 4.7k, są za jasno
