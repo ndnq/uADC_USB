@@ -372,29 +372,36 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = LD_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(LD_1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD_2_Pin LD_4_Pin LD_5_Pin */
   GPIO_InitStruct.Pin = LD_2_Pin|LD_4_Pin|LD_5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD_3_Pin */
   GPIO_InitStruct.Pin = LD_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(LD_3_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MEM_CS_Pin LD_0_Pin */
-  GPIO_InitStruct.Pin = MEM_CS_Pin|LD_0_Pin;
+  /*Configure GPIO pin : MEM_CS_Pin */
+  GPIO_InitStruct.Pin = MEM_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(MEM_CS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LD_0_Pin */
+  GPIO_InitStruct.Pin = LD_0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(LD_0_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USR_IN_boot_Pin */
   GPIO_InitStruct.Pin = USR_IN_boot_Pin;
