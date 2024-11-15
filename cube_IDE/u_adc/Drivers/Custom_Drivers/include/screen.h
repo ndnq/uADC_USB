@@ -24,72 +24,34 @@ typedef struct mapEntry{
 
 } mapEntry;
 
-//First dimension is the x axis starting from the top
-//Second dimenstion is the y axis starting from the left
-const mapEntry BINDINGS[SCREEN_WIDTH][SCREEN_HEIGHT] = {
-    {
-       {LD_0_Pin, LD_5_Pin, LD_0_GPIO_Port, LD_5_GPIO_Port},
-       {LD_1_Pin, LD_5_Pin, LD_1_GPIO_Port, LD_5_GPIO_Port},
-       {LD_2_Pin, LD_5_Pin, LD_2_GPIO_Port, LD_5_GPIO_Port},
-       {LD_3_Pin, LD_5_Pin, LD_3_GPIO_Port, LD_5_GPIO_Port},
-       {LD_4_Pin, LD_5_Pin, LD_4_GPIO_Port, LD_5_GPIO_Port}
-    },
-    {
-        {LD_0_Pin, LD_4_Pin, LD_0_GPIO_Port, LD_4_GPIO_Port},
-        {LD_1_Pin, LD_4_Pin, LD_1_GPIO_Port, LD_4_GPIO_Port},
-        {LD_2_Pin, LD_4_Pin, LD_2_GPIO_Port, LD_4_GPIO_Port},
-        {LD_3_Pin, LD_4_Pin, LD_3_GPIO_Port, LD_4_GPIO_Port},
-        {LD_5_Pin, LD_4_Pin, LD_5_GPIO_Port, LD_4_GPIO_Port}
-    },
-    {
-        {LD_0_Pin, LD_3_Pin, LD_0_GPIO_Port, LD_3_GPIO_Port},
-        {LD_1_Pin, LD_3_Pin, LD_1_GPIO_Port, LD_3_GPIO_Port},
-        {LD_2_Pin, LD_3_Pin, LD_2_GPIO_Port, LD_3_GPIO_Port},
-        {LD_4_Pin, LD_3_Pin, LD_4_GPIO_Port, LD_3_GPIO_Port},
-        {LD_5_Pin, LD_3_Pin, LD_5_GPIO_Port, LD_3_GPIO_Port}
-    },
-    {
-        {LD_0_Pin, LD_2_Pin, LD_0_GPIO_Port, LD_2_GPIO_Port},
-        {LD_1_Pin, LD_2_Pin, LD_1_GPIO_Port, LD_2_GPIO_Port},
-        {LD_3_Pin, LD_2_Pin, LD_3_GPIO_Port, LD_2_GPIO_Port},
-        {LD_4_Pin, LD_2_Pin, LD_4_GPIO_Port, LD_2_GPIO_Port},
-        {LD_5_Pin, LD_2_Pin, LD_5_GPIO_Port, LD_2_GPIO_Port}
-    },
-    {
-        {LD_0_Pin, LD_1_Pin, LD_0_GPIO_Port, LD_1_GPIO_Port},
-        {LD_2_Pin, LD_1_Pin, LD_2_GPIO_Port, LD_1_GPIO_Port},
-        {LD_3_Pin, LD_1_Pin, LD_3_GPIO_Port, LD_1_GPIO_Port},
-        {LD_4_Pin, LD_1_Pin, LD_4_GPIO_Port, LD_1_GPIO_Port},
-        {LD_5_Pin, LD_1_Pin, LD_5_GPIO_Port, LD_1_GPIO_Port}
-    },
-    {
-        {LD_1_Pin, LD_0_Pin, LD_1_GPIO_Port, LD_0_GPIO_Port},
-        {LD_2_Pin, LD_0_Pin, LD_2_GPIO_Port, LD_0_GPIO_Port},
-        {LD_3_Pin, LD_0_Pin, LD_3_GPIO_Port, LD_0_GPIO_Port},
-        {LD_4_Pin, LD_0_Pin, LD_4_GPIO_Port, LD_0_GPIO_Port},
-        {LD_5_Pin, LD_0_Pin, LD_5_GPIO_Port, LD_0_GPIO_Port}
-    }
-};
-
-
-
-typedef struct ScreenLed{
-	uint8_t currentState;
-	uint8_t state;
-
-} ScreenLed;
 
 typedef struct ScreenDevice {
 	//LedBuffer 6 width 5 height
-	ScreenLed buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
+	uint8_t buffer[SCREEN_WIDTH][SCREEN_HEIGHT];
 	uint32_t refreshDelay; // in ms
+	//Variables keeping track of the scanned position
+	uint8_t xpos;
+	uint8_t ypos;
+	//Basiclyy a queue with one element. If there are any LEDS lit up they will be turned off before turning on the next one
+	mapEntry lastLED;
+	uint8_t isSomeLedOn;
+
 	void (*drawScreen)(void);
 	void (*init)(void);
 
 
-} ScreenDevice;
 
+
+} ScreenDevice;
+extern const mapEntry BINDINGS[SCREEN_WIDTH][SCREEN_HEIGHT];
+extern ScreenDevice dev;
 void drawScreen();
+void lightUpLED(uint8_t x, uint8_t y);
+void setPinHiZ(GPIO_TypeDef* port, uint16_t pin);
+void setPinWithInit(GPIO_TypeDef* port, uint16_t pin,uint8_t state);
+void revertLastLED();
+void setLEDHiZ(uint8_t x,uint8_t y);
+void setLEDatpos(uint8_t x, uint8_t y);
 void init();
 
 #endif
