@@ -1,0 +1,8 @@
+CH0 GIT
+CH1 First amp offset 3.3, see R16 and R17
+CH2 same
+CH3 git
+CH4 stage 1 fedback path
+CH5 stage 1 offset missing
+CH6 OK
+CH7 stage 1 offset high

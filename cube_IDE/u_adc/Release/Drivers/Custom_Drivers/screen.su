@@ -1,0 +1,7 @@
+../Drivers/Custom_Drivers/screen.c:122:6:drawScreen	0	static
+../Drivers/Custom_Drivers/screen.c:74:6:setPinHiZ	40	static
+../Drivers/Custom_Drivers/screen.c:85:6:setLEDHiZ	8	static
+../Drivers/Custom_Drivers/screen.c:60:6:init	32	static
+../Drivers/Custom_Drivers/screen.c:91:6:setPinWithInit	40	static
+../Drivers/Custom_Drivers/screen.c:114:6:revertLastLED	8	static
+../Drivers/Custom_Drivers/screen.c:102:6:setLEDatpos	24	static
