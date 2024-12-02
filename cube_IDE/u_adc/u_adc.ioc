@@ -1,17 +1,17 @@
 #MicroXplorer Configuration settings - do not modify
 ADC.DataAlign=ADC_DATAALIGN_RIGHT
 ADC.IPParameters=SamplingTime,Resolution,DataAlign
-ADC.Resolution=ADC_RESOLUTION_8B
-ADC.SamplingTime=ADC_SAMPLETIME_1CYCLE_5
+ADC.Resolution=ADC_RESOLUTION_12B
+ADC.SamplingTime=ADC_SAMPLETIME_55CYCLES_5
 CAD.formats=
 CAD.pinconfig=
 CAD.provider=
 Dma.ADC.0.Direction=DMA_PERIPH_TO_MEMORY
 Dma.ADC.0.Instance=DMA1_Channel1
-Dma.ADC.0.MemDataAlignment=DMA_MDATAALIGN_BYTE
+Dma.ADC.0.MemDataAlignment=DMA_MDATAALIGN_HALFWORD
 Dma.ADC.0.MemInc=DMA_MINC_ENABLE
 Dma.ADC.0.Mode=DMA_NORMAL
-Dma.ADC.0.PeriphDataAlignment=DMA_PDATAALIGN_BYTE
+Dma.ADC.0.PeriphDataAlignment=DMA_PDATAALIGN_HALFWORD
 Dma.ADC.0.PeriphInc=DMA_PINC_DISABLE
 Dma.ADC.0.Priority=DMA_PRIORITY_LOW
 Dma.ADC.0.RequestParameters=Instance,Direction,PeriphInc,MemInc,PeriphDataAlignment,MemDataAlignment,Mode,Priority

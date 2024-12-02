@@ -203,7 +203,7 @@ static void MX_ADC_Init(void)
   */
   hadc.Instance = ADC1;
   hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-  hadc.Init.Resolution = ADC_RESOLUTION_8B;
+  hadc.Init.Resolution = ADC_RESOLUTION_12B;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
@@ -224,7 +224,7 @@ static void MX_ADC_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -396,13 +396,21 @@ static void MX_GPIO_Init(void)
 uint8_t transmitBuffer[1024];
 uint16_t bufferIndex = 0;
 uint8_t len;
+//
+char tmp[20];
 #define transmitBytes 800
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
-		transmitBuffer[bufferIndex] = (uint8_t)adcBuffer[0];
-		  bufferIndex = bufferIndex + 1;
+    	uint8_t high_byte = (adcBuffer[0] >> 8) & 0xFF;  // Shift right by 8 bits to get the high byte
+    	uint8_t low_byte = adcBuffer[0] & 0xFF;          // Mask to get the low byte
+
+		transmitBuffer[bufferIndex] = high_byte;
+		transmitBuffer[bufferIndex + 1] = low_byte;
+		bufferIndex = bufferIndex + 2;
 		  if (bufferIndex > transmitBytes ){
 			  CDC_Transmit_FS(transmitBuffer, bufferIndex);
+			 /* int len = sprintf(tmp,"%d\n",adcBuffer[0]);
+			  CDC_Transmit_FS(tmp, len);*/
 			  bufferIndex = 0;
 		  }
 }
