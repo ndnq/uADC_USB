@@ -1,69 +1,57 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import serial
 import time
+import matplotlib.pyplot as plt
+import numpy as np
+import sounddevice as sd
 
-def plot_channel(com_port: str, num_values: int,chan = 0):
-    """
-    Open a serial port and plot the first `num_values` values of channel 1.
+def read_and_plot_serial_data(port, baudrate, N):
+    # Open the serial port
+    ser = serial.Serial(port, baudrate)
     
-    Parameters:
-        com_port (str): The COM port to connect to (e.g., "COM3").
-        baud_rate (int): The baud rate for the serial connection.
-        num_values (int): The number of values to plot from channel 1.
-    """
-    # Initialize the serial connection
-    try:
-        ser = serial.Serial(com_port, 12000000, timeout=1)
-        print(f"Connected to {com_port} at 12000000 baud.")
-    except serial.SerialException as e:
-        print(f"Error opening serial port: {e}")
-        return
+    # Prepare to store data and timestamps
+    data = []
+    timestamps = []
     
-    # Buffer to store channel 1 values
-    channel_values = []
-    t0 = 1
-    try:
-        while len(channel_values) < num_values:
-            # Read a line from the serial port
+    # Start the timer
+    start_time = time.time()
+    
+    # Read N lines from the serial port
+    for _ in range(N):
+        line = ser.readline()
+        line = line.replace(b'\x00', b'')  
+        line = line.decode('utf-8').strip()  # Read a line and decode it to string
+        try:
             
-            line = ser.readline().decode('utf-8').strip()
-            #print(f"Received: {line}")  # Debug: Print the received line
-            dt = time.time()-t0
-            #print(f"freq = {1/dt}")
-            # Parse the line if it matches the expected format5
-            try:
-                # Split the line into channel and value components
-                channel, value = line.split(":")
-                value = int(value.strip())/4095*3.3       # Extract value
-                # Store the value if it's from channel 1
-                channel_values.append(value)
-            except (ValueError, IndexError) as parse_error:
-                print(f"Failed to parse line: {line} ({parse_error})")
-        t0 = time.time()
+            value = int(line)  # Assuming the values are integers like 1234
+            data.append(value)
+        except ValueError:
+            print(f"Skipping invalid data: {line}, {line.encode("ascii")}")
     
-    except KeyboardInterrupt:
-        print("Interrupted by user.")
+    # Stop the timer
+    end_time = time.time()
+    elapsed_time = end_time - start_time
     
-    finally:
-        # Close the serial connection
-        ser.close()
-        print("Serial port closed.")
+    # Close the serial port
+    ser.close()
     
-    # Plot the collected values from channel 1
-    if channel_values:
-        channel_values = channel_values 
-        
-        plt.plot(channel_values, marker='o', label='Channel 1')
-        plt.ylim((0,3.3))
-        plt.title(f'Channel {chan} Data')
-        plt.xlabel('Sample Index')
-        plt.ylabel('Value [V]')
-        plt.legend()
-        plt.grid(True)
-        plt.show()
-    else:
-        print("No data received for Channel 1.")    
+    # Plot the data
+    data = np.asarray(data, dtype=np.int16)
+    data = np.clip(data, 0, 4095)  # Assuming 12-bit data (0-4095)
+    sd.play(data, samplerate=44100)  # Play at a 44.1kHz sample rate
+    plt.plot(data)
+    plt.xlabel('Time (seconds)')
+    plt.ylabel('Value')
+    plt.title(f'Serial Data over Time ({N} readings)')
+    plt.grid(True)
+    plt.show()
+    # Return the elapsed time
+    return elapsed_time
 
 # Example usage
-plot_channel("COM4", 20, 0)  # Adjust COM port and baud rate as needed
+port = 'COM4'  # Change to your serial port
+baudrate = 1000000  # Change to your baudrate
+N = 40000  # Number of lines to read
+
+elapsed_time = read_and_plot_serial_data(port, baudrate, N)
+
+print(f"Time taken to read {N} lines: {elapsed_time:.4f} seconds, rate: {N/elapsed_time}")

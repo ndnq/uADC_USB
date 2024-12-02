@@ -65,8 +65,8 @@ all: main-build
 main-build: u_adc.elf secondary-outputs
 
 # Tool invocations
-u_adc.elf u_adc.map: $(OBJS) $(USER_OBJS) C:\Users\Daniel\Desktop\uADC_USB\cube_ide\u_adc\STM32F042K6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "u_adc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\Daniel\Desktop\uADC_USB\cube_ide\u_adc\STM32F042K6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="u_adc.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+u_adc.elf u_adc.map: $(OBJS) $(USER_OBJS) E:\Desktop\uADC_USB\cube_IDE\u_adc\STM32F042K6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "u_adc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"E:\Desktop\uADC_USB\cube_IDE\u_adc\STM32F042K6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="u_adc.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

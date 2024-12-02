@@ -203,7 +203,7 @@ static void MX_ADC_Init(void)
   */
   hadc.Instance = ADC1;
   hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-  hadc.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc.Init.Resolution = ADC_RESOLUTION_8B;
   hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
   hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
@@ -224,7 +224,7 @@ static void MX_ADC_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -296,7 +296,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 47999;
+  htim3.Init.Period = 1199;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -392,7 +392,20 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+//char messageBuffer[5];
+uint8_t transmitBuffer[1024];
+uint16_t bufferIndex = 0;
+uint8_t len;
+#define transmitBytes 800
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+		transmitBuffer[bufferIndex] = (uint8_t)adcBuffer[0];
+		  bufferIndex = bufferIndex + 1;
+		  if (bufferIndex > transmitBytes ){
+			  CDC_Transmit_FS(transmitBuffer, bufferIndex);
+			  bufferIndex = 0;
+		  }
+}
 /* USER CODE END 4 */
 
 /**

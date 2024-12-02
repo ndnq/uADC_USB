@@ -12,6 +12,7 @@ RemoteSystemsTempFiles/
 *.fft
 Debug/
 *.launch
+readScritpt/.venv/
 
 # STM32 git ignore
 *.mxproject
