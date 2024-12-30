@@ -224,7 +224,7 @@ static void MX_ADC_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -296,7 +296,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 47999;
+  htim3.Init.Period = 1199;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -392,7 +392,28 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//char messageBuffer[5];
+uint8_t transmitBuffer[1024];
+uint16_t bufferIndex = 0;
+uint8_t len;
+//
+char tmp[20];
+#define transmitBytes 800
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+    	uint8_t high_byte = (adcBuffer[0] >> 8) & 0xFF;  // Shift right by 8 bits to get the high byte
+    	uint8_t low_byte = adcBuffer[0] & 0xFF;          // Mask to get the low byte
 
+		transmitBuffer[bufferIndex] = high_byte;
+		transmitBuffer[bufferIndex + 1] = low_byte;
+		bufferIndex = bufferIndex + 2;
+		  if (bufferIndex > transmitBytes ){
+			  CDC_Transmit_FS(transmitBuffer, bufferIndex);
+			 /* int len = sprintf(tmp,"%d\n",adcBuffer[0]);
+			  CDC_Transmit_FS(tmp, len);*/
+			  bufferIndex = 0;
+		  }
+}
 /* USER CODE END 4 */
 
 /**

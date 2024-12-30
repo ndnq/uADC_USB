@@ -24,8 +24,6 @@
 /* USER CODE BEGIN Includes */
 extern volatile uint16_t adcBuffer[8];
 extern ADC_HandleTypeDef hadc;
-extern DMA_HandleTypeDef hdma_adc;
-volatile uint16_t overrun = 0;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -152,14 +150,10 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
-	overrun = 1;
   /* USER CODE END DMA1_Channel1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc);
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
-  char msg[20];
-  uint8_t len = sprintf(msg,"Chan : %d\n",adcBuffer[0]);
-  while(CDC_Transmit_FS(msg, len) == 1){};
-  overrun = 0;
+
   /* USER CODE END DMA1_Channel1_IRQn 1 */
 }
 
@@ -169,11 +163,7 @@ void DMA1_Channel1_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	if (overrun == 1){
-		char msg[] = "Overrun!!!!\n";
-		while(CDC_Transmit_FS(msg, strlen(msg)) == 1){};
-	}
-	HAL_ADC_Start_DMA(&hadc, adcBuffer, 1);
+  HAL_ADC_Start_DMA(&hadc, adcBuffer, 1);
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
