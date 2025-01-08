@@ -31,5 +31,5 @@ def read_and_plot_samples(com_port, num_samples):
 
 if __name__ == "__main__":
     com_port = "COM4"  # Example COM port, change as needed
-    num_samples = 40000*10  # Example number of samples to collect
+    num_samples = 40000*5  # Example number of samples to collect
     read_and_plot_samples(com_port, num_samples)
